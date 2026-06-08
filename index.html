@@ -1,276 +1,664 @@
-# Prompt — App Família Furtado
-
-## Contexto
-
-Crie um aplicativo web completo em **React (JSX)** chamado **"Família Furtado"**, destinado à organização pessoal e familiar. O app deve ser mobile-first, com navegação por abas na parte inferior da tela, tema dark (fundo `#0a0a1a`), tipografia elegante com `Playfair Display` (títulos) e `DM Sans` (corpo), e paleta de cores baseada em rosa `#e85d96` como cor principal.
-
-Todos os dados devem persistir via `localStorage`. Não utilizar `<form>` HTML — usar apenas `onClick` e `onChange`.
-
----
-
-## Membros Iniciais
-
-Pré-cadastrar os seguintes membros com cores distintas:
-
-| Nome | Função | Cor |
-|---|---|---|
-| Carla Furtado | Mãe / Responsável | `#e85d96` |
-| Vanessa | Cônjuge | `#8b5cf6` |
-| Lívia | Filha | `#f59e0b` |
-| Giovanna | Filha | `#10b981` |
-
----
-
-## Estrutura de Navegação (Bottom Tab Bar)
-
-7 abas fixas na parte inferior:
-
-1. **Início** — Dashboard geral
-2. **Família** — Cadastro dos membros
-3. **Tarefas** — Lista de afazeres
-4. **Agenda** — Eventos coletivos e individuais
-5. **Lembretes** — Alertas com data, hora e repetição
-6. **Compras** — Listas separadas por local
-7. **Medidas** — Tamanhos e medidas dos membros
-
----
-
-## Seção 1 — Início (Dashboard)
-
-- Saudação dinâmica por horário (Bom dia / Boa tarde / Boa noite) com o nome "Carla"
-- Avatares dos membros no cabeçalho (inicial do nome com a cor do membro)
-- 4 cards de resumo em grid 2x2:
-  - Tarefas pendentes
-  - Eventos próximos
-  - Lembretes ativos
-  - Itens de compras pendentes
-- Cada card é clicável e navega para a seção correspondente
-- Grid de atalhos rápidos para todas as seções
-- Bloco de alerta amarelo exibindo lembretes do dia atual (se houver)
-
----
-
-## Seção 2 — Família (Cadastro)
-
-Campos por membro:
-- Nome completo
-- Função / Parentesco (ex.: Filha, Cônjuge)
-- Telefone
-- E-mail
-- Modelo do celular
-- **Medidas:** Cintura (cm), Quadril (cm), Busto (cm), Altura (cm), Calça (tamanho), Blusa/Vestido (tamanho), Calçado (número)
-- Cor personalizável (color picker)
-
-Funcionalidades:
-- Botão "Adicionar" para novo membro
-- Editar e excluir membros (exceto o membro de id fixo 1)
-- Card visual por membro com avatar colorido, badges de função e exibição das medidas preenchidas
-- Modal para criação/edição
-
----
-
-## Seção 3 — Tarefas
-
-Categorias disponíveis: `Fazer`, `Não Esquecer`, `Lembrar`, `Urgente`, `Pessoal`, `Trabalho`
-
-Campos por tarefa:
-- Título
-- Categoria (select)
-- Prioridade: `Urgente`, `Alta`, `Normal`, `Baixa` (com cores distintas: vermelho, amarelo, índigo, verde)
-- Responsável (select com membros cadastrados)
-- Data limite (date picker)
-- Observação/Nota
-
-Funcionalidades:
-- Filtro por categoria (pills clicáveis)
-- Marcar como concluída (checkbox com animação)
-- Excluir tarefa
-- Contador de pendentes no título da seção
-- Itens concluídos ficam com 50% de opacidade e riscados
-
----
-
-## Seção 4 — Agenda
-
-Tipos de agenda: `Coletiva` (família toda) e `Individual` (por membro)
-
-Campos por evento:
-- Título
-- Data e Horário
-- Tipo (coletiva / individual)
-- Participante principal (select com membros)
-- Observações (local, detalhes)
-- **Checkbox "Abrir no Google Agenda ao salvar":** ao marcar e salvar, gera URL do Google Calendar com os dados e abre em nova aba
-
-Funcionalidades:
-- Filtro por tipo (Coletiva / Individual) com botões
-- Filtro por membro (select)
-- Separação visual: "Próximos Eventos" e "Anteriores"
-- Card de evento com mini-calendário (mês + dia) na cor do membro
-- Excluir evento
-
-**URL Google Agenda:**
-```
-https://calendar.google.com/calendar/render?action=TEMPLATE
-  &text={título}
-  &dates={startISO}/{endISO}
-  &details={observações}
-```
-Duração padrão: 1 hora. Horário padrão se não preenchido: 09:00.
-
----
-
-## Seção 5 — Lembretes
-
-Campos por lembrete:
-- Texto do lembrete
-- Data e Horário
-- Para quem (select: "Família toda" ou membro específico)
-- Prioridade: `Urgente`, `Alta`, `Normal`, `Baixa`
-- Repetição: `Não repete`, `Diário`, `Semanal`, `Mensal`, `Anual`
-
-Funcionalidades:
-- Bloco de aviso amarelo no topo da seção listando lembretes do dia atual não concluídos
-- Marcar como concluído (checkbox circular)
-- Excluir lembrete
-- Ordenação por data (mais próximos primeiro)
-- Itens concluídos com opacidade reduzida e riscados
-
----
-
-## Seção 6 — Lista de Compras
-
-Listas separadas por local (abas com ícone emoji):
-
-| Lista | Ícone |
-|---|---|
-| Mercado | 🛒 |
-| Casa Praia | 🏖️ |
-| Casa Caxias | 🏠 |
-| Farmácia | 💊 |
-| Vestuário | 👗 |
-| Outros | 📦 |
-
-Campos por item:
-- Quantidade (campo curto à esquerda)
-- Nome do item (campo principal)
-
-Funcionalidades:
-- Adicionar item via botão ou tecla Enter
-- Marcar item como comprado (checkbox)
-- Excluir item
-- Botão "Limpar itens marcados" (aparece quando há itens concluídos)
-- Badge com contador de pendentes por lista
-- Contador global no título: "X de Y itens pendentes"
-
----
-
-## Seção 7 — Medidas & Tamanhos
-
-- Seletor de membro no topo (pills com a cor de cada membro)
-- Grid 2x2 com cards para cada medida do membro selecionado:
-  - 📏 Cintura (cm)
-  - 📏 Quadril (cm)
-  - 📏 Busto (cm)
-  - 📐 Altura (cm)
-  - 👖 Calça (tamanho)
-  - 👕 Blusa / Vestido (tamanho)
-  - 👟 Calçado (número)
-- Campos sem valor exibem "Não informado" em itálico
-- Campos preenchidos destacados com borda na cor do membro
-
-**Guia de Tamanhos BR** (bloco informativo no rodapé da seção):
-
-Calça:
-`34→68-72cm` | `36→72-76cm` | `38→76-80cm` | `40→80-84cm` | `42→84-88cm` | `44→88-92cm` | `PP→até 72cm` | `P→72-76cm` | `M→76-80cm` | `G→80-88cm` | `GG→88-96cm`
-
-Blusa/Vestido:
-`PP→Busto 80-84cm` | `P→84-88cm` | `M→88-92cm` | `G→92-98cm` | `GG→98-104cm` | `XGG→104-110cm`
-
-O tamanho do membro selecionado é destacado com a cor do membro.
-
----
-
-## Componentes Reutilizáveis
-
-### `<Modal title onClose>`
-- Overlay escuro semi-transparente
-- Card centralizado com borda `#2d2d4e`, borderRadius 16px, fundo `#1a1a2e`
-- Cabeçalho com título e botão X
-- Scroll interno (`overflow: auto`, `maxHeight: 90vh`)
-
-### `<FInput label value onChange type placeholder>`
-- Label em uppercase, letra pequena, cor `#aaa`
-- Input com fundo `#0d0d1a`, borda `#2d2d4e`, cor branca
-
-### `<FSelect label value onChange options>`
-- Mesmo visual do FInput
-
-### `<Badge text color>`
-- Pill com fundo `color + "22"`, borda `color + "44"`, texto na cor
-
-### `<Icon name size>`
-- SVG inline com paths para: `home`, `users`, `calendar`, `bell`, `shopping`, `ruler`, `check`, `plus`, `trash`, `edit`, `x`, `clock`, `link`, `person`, `tag`, `task`, `warn`, `phone`, `mail`, `map`, `star`
-
----
-
-## Hook de Persistência
-
-```js
-const useStorage = (key, initialValue) => {
-  const [val, setVal] = useState(() => {
-    try {
-      const stored = localStorage.getItem(key);
-      return stored ? JSON.parse(stored) : initialValue;
-    } catch { return initialValue; }
-  });
-  useEffect(() => {
-    try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
-  }, [key, val]);
-  return [val, setVal];
-};
-```
-
-Chaves usadas:
-- `ff_members` — membros da família
-- `ff_tasks` — tarefas
-- `ff_events` — eventos da agenda
-- `ff_reminders` — lembretes
-- `ff_shopping` — listas de compras (objeto com chave por lista)
-
----
-
-## Design System
-
-```
-Fundo principal:      #0a0a1a
-Fundo card:           #12122a
-Fundo input:          #0d0d1a
-Fundo item:           #1a1a2e
-Borda padrão:         #1e1e3a
-Borda sutil:          #2d2d4e
-
-Rosa principal:       #e85d96
-Índigo:               #6366f1
-Âmbar:                #f59e0b
-Verde:                #10b981
-Vermelho:             #ef4444
-
-Texto principal:      #ffffff
-Texto secundário:     #aaaaaa
-Texto desativado:     #555555
-
-Título (serif):       Playfair Display 600–800
-Corpo (sans):         DM Sans 400–700
-```
-
----
-
-## Comportamentos Adicionais
-
-- Saudação dinâmica: antes das 12h → "Bom dia", 12–18h → "Boa tarde", após 18h → "Boa noite"
-- Aviso de lembretes do dia visível tanto no Dashboard quanto na seção de Lembretes
-- Eventos passados exibidos com opacidade 60%, apenas os 5 mais recentes
-- Tarefas e lembretes concluídos ficam visíveis mas com opacidade 50% e texto riscado
-- Bottom nav fixa com ícone e label, cor `#e85d96` quando ativo, `#444` quando inativo
-- Google Fonts carregado via `<link>` dentro do JSX retornado
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Família Furtado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root {
+  --blue: #185FA5; --blue-light: #E6F1FB; --blue-dark: #0C447C;
+  --amber: #EF9F27; --amber-light: #FAEEDA; --amber-dark: #854F0B;
+  --green: #1D9E75; --green-light: #EAF3DE;
+  --red: #E24B4A; --red-light: #FCEBEB; --red-dark: #A32D2D;
+  --purple: #7F77DD; --purple-light: #EEEDFE;
+  --coral: #D85A30; --coral-light: #FAECE7;
+  --gray-50: #F8F8F6; --gray-100: #F1EFE8; --gray-200: #D3D1C7;
+  --gray-600: #5F5E5A; --gray-800: #444441;
+  --text: #1a1a18; --text-muted: #5F5E5A; --text-hint: #888780;
+  --bg: #F4F2EC; --surface: #FFFFFF; --border: rgba(0,0,0,0.10);
+  --radius: 12px; --radius-sm: 8px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* HEADER */
+.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: var(--shadow); }
+.header-logo { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--blue-dark); }
+.header-date { font-size: 12px; color: var(--text-muted); }
+
+/* NAV */
+.nav { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; padding: 0 12px; gap: 2px; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn { display: flex; align-items: center; gap: 5px; padding: 12px 14px; font-size: 13px; font-family: 'Nunito', sans-serif; font-weight: 600; color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+.nav-btn:hover { color: var(--blue); background: var(--blue-light); }
+.nav-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+/* CONTENT */
+.content { padding: 20px; max-width: 700px; margin: 0 auto; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+
+/* METRICS */
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; text-align: center; box-shadow: var(--shadow); }
+.metric-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.metric-value { font-size: 26px; font-weight: 700; color: var(--text); }
+
+/* ALERT */
+.alert { background: var(--amber-light); border-left: 3px solid var(--amber); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; margin-bottom: 8px; font-size: 13px; color: var(--amber-dark); font-weight: 500; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); cursor: pointer; font-size: 13px; font-family: 'Nunito', sans-serif; font-weight: 600; transition: all 0.15s; }
+.btn:hover { background: var(--gray-100); }
+.btn-primary { background: var(--blue); color: white; border-color: var(--blue); }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-danger { background: var(--red-light); color: var(--red-dark); border-color: transparent; padding: 5px 9px; font-size: 13px; }
+.btn-danger:hover { background: #f7c1c1; }
+.btn-icon { background: none; border: none; cursor: pointer; color: var(--text-hint); font-size: 16px; padding: 4px; line-height: 1; transition: color 0.15s; }
+.btn-icon:hover { color: var(--red); }
+
+/* SECTION HEADER */
+.sec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.sec-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--blue-dark); }
+
+/* FORM */
+label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px; }
+input, select, textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-family: 'Nunito', sans-serif; background: var(--gray-50); color: var(--text); margin-bottom: 10px; outline: none; transition: border-color 0.15s; }
+input:focus, select:focus, textarea:focus { border-color: var(--blue); background: white; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* MEMBER CARD */
+.member-card { border-left: 4px solid; border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 10px; background: var(--gray-50); display: flex; justify-content: space-between; align-items: flex-start; }
+.member-name { font-weight: 700; font-size: 14px; }
+.member-detail { font-size: 12px; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+
+/* TASK */
+.task-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+.task-item:last-child { border-bottom: none; }
+.task-check { width: 17px; height: 17px; cursor: pointer; flex-shrink: 0; accent-color: var(--blue); }
+.task-text { flex: 1; font-size: 13px; }
+.task-text.done { text-decoration: line-through; color: var(--text-hint); }
+.task-meta { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
+.tag { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 700; margin-right: 4px; }
+.tag-urgente { background: var(--red-light); color: var(--red-dark); }
+.tag-lembrar { background: var(--blue-light); color: var(--blue-dark); }
+.tag-nao-esquecer { background: var(--amber-light); color: var(--amber-dark); }
+.tag-fazer { background: var(--green-light); color: #27500A; }
+
+/* AGENDA */
+.agenda-item { padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--blue-light); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
+.agenda-time { font-size: 11px; color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.agenda-title { font-size: 14px; font-weight: 700; margin: 2px 0; }
+.agenda-sub { font-size: 12px; color: var(--text-muted); }
+
+/* LEMBRETE */
+.lembrete-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.lembrete-item:last-child { border-bottom: none; }
+.lembrete-icon { width: 36px; height: 36px; background: var(--amber-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--amber); font-size: 17px; flex-shrink: 0; }
+.lembrete-titulo { font-size: 13px; font-weight: 700; }
+.lembrete-data { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px; background: var(--blue-light); color: var(--blue-dark); font-weight: 700; margin-left: 6px; vertical-align: middle; }
+.badge-today { background: var(--red-light); color: var(--red-dark); }
+
+/* COMPRAS */
+.lista-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+.lista-tab { padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; background: var(--surface); color: var(--text-muted); font-family: 'Nunito', sans-serif; transition: all 0.15s; }
+.lista-tab.active { background: var(--blue); color: white; border-color: var(--blue); }
+.lista-tab:hover:not(.active) { background: var(--blue-light); color: var(--blue); }
+.compra-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.compra-item:last-child { border-bottom: none; }
+.compra-item input[type="checkbox"] { accent-color: var(--blue); width: 16px; height: 16px; flex-shrink: 0; }
+
+/* MEDIDAS */
+.medidas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.medida-field { background: var(--gray-50); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+.medida-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+.medida-val { font-size: 16px; font-weight: 700; color: var(--text); }
+
+/* GUIA TAMANHOS */
+.guia-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.guia-table th { background: var(--gray-100); padding: 7px 10px; text-align: left; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.guia-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.guia-table tr:nth-child(even) td { background: var(--gray-50); }
+
+/* MODAL */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: var(--radius); padding: 22px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--blue-dark); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
+.modal-close { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--text-muted); line-height: 1; }
+
+/* EMPTY */
+.empty { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 13px; }
+.empty i { font-size: 36px; display: block; margin-bottom: 8px; color: var(--gray-200); }
+
+/* SHORTCUT GRID */
+.shortcut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.shortcut-btn { display: flex; align-items: center; gap: 8px; padding: 12px 14px; background: var(--gray-50); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text); font-family: 'Nunito', sans-serif; transition: all 0.15s; }
+.shortcut-btn:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+.shortcut-btn i { font-size: 18px; color: var(--blue); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Família Furtado</div>
+  <div class="header-date" id="header-date"></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('inicio')"><i class="ti ti-home"></i> Início</button>
+  <button class="nav-btn" onclick="showSection('familia')"><i class="ti ti-users"></i> Família</button>
+  <button class="nav-btn" onclick="showSection('tarefas')"><i class="ti ti-checklist"></i> Tarefas</button>
+  <button class="nav-btn" onclick="showSection('agenda')"><i class="ti ti-calendar"></i> Agenda</button>
+  <button class="nav-btn" onclick="showSection('lembretes')"><i class="ti ti-bell"></i> Lembretes</button>
+  <button class="nav-btn" onclick="showSection('compras')"><i class="ti ti-shopping-cart"></i> Compras</button>
+  <button class="nav-btn" onclick="showSection('medidas')"><i class="ti ti-ruler"></i> Medidas</button>
+</nav>
+
+<div class="content">
+
+<!-- INÍCIO -->
+<div id="sec-inicio" class="section active">
+  <div class="metric-grid" id="metrics"></div>
+  <div class="card">
+    <div class="card-title"><i class="ti ti-alert-circle" style="color:var(--amber);"></i> Alertas do dia</div>
+    <div id="alertas-dia"></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><i class="ti ti-bolt" style="color:var(--blue);"></i> Atalhos rápidos</div>
+    <div class="shortcut-grid">
+      <button class="shortcut-btn" onclick="showSection('tarefas');openModal('modalTarefa')"><i class="ti ti-plus"></i> Nova tarefa</button>
+      <button class="shortcut-btn" onclick="showSection('agenda');openModal('modalAgenda')"><i class="ti ti-calendar-plus"></i> Novo evento</button>
+      <button class="shortcut-btn" onclick="showSection('lembretes');openModal('modalLembrete')"><i class="ti ti-bell-plus"></i> Novo lembrete</button>
+      <button class="shortcut-btn" onclick="showSection('compras')"><i class="ti ti-shopping-cart"></i> Lista de compras</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAMÍLIA -->
+<div id="sec-familia" class="section">
+  <div class="sec-header">
+    <div class="sec-title">Família</div>
+    <button class="btn btn-primary" onclick="openModal('modalMembro')"><i class="ti ti-plus"></i> Adicionar</button>
+  </div>
+  <div id="lista-membros"></div>
+</div>
+
+<!-- TAREFAS -->
+<div id="sec-tarefas" class="section">
+  <div class="sec-header">
+    <div class="sec-title">Tarefas</div>
+    <button class="btn btn-primary" onclick="openModal('modalTarefa')"><i class="ti ti-plus"></i> Nova</button>
+  </div>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div id="lista-tarefas"></div>
+  </div>
+</div>
+
+<!-- AGENDA -->
+<div id="sec-agenda" class="section">
+  <div class="sec-header">
+    <div class="sec-title">Agenda</div>
+    <button class="btn btn-primary" onclick="openModal('modalAgenda')"><i class="ti ti-plus"></i> Novo evento</button>
+  </div>
+  <div id="lista-agenda"></div>
+</div>
+
+<!-- LEMBRETES -->
+<div id="sec-lembretes" class="section">
+  <div class="sec-header">
+    <div class="sec-title">Lembretes</div>
+    <button class="btn btn-primary" onclick="openModal('modalLembrete')"><i class="ti ti-plus"></i> Novo</button>
+  </div>
+  <div class="card" style="padding:0 0 4px;">
+    <div id="lista-lembretes" style="padding:0 18px;"></div>
+  </div>
+</div>
+
+<!-- COMPRAS -->
+<div id="sec-compras" class="section">
+  <div class="sec-header">
+    <div class="sec-title">Compras</div>
+    <button class="btn btn-primary" onclick="openModal('modalCompra')"><i class="ti ti-plus"></i> Adicionar</button>
+  </div>
+  <div class="lista-tabs" id="lista-tabs"></div>
+  <div class="card">
+    <div class="card-title" id="lista-titulo"></div>
+    <div id="lista-compras-items"></div>
+  </div>
+</div>
+
+<!-- MEDIDAS -->
+<div id="sec-medidas" class="section">
+  <div class="sec-header">
+    <div class="sec-title">Medidas</div>
+    <button class="btn btn-primary" onclick="openModal('modalMedidas')"><i class="ti ti-plus"></i> Registrar</button>
+  </div>
+  <div id="lista-medidas"></div>
+  <div class="card">
+    <div class="card-title"><i class="ti ti-info-circle" style="color:var(--blue);"></i> Guia de tamanhos BR</div>
+    <table class="guia-table">
+      <tr><th>Número BR</th><th>Cintura (cm)</th><th>Blusa</th><th>Busto (cm)</th></tr>
+      <tr><td>34</td><td>60–64</td><td>P</td><td>80–84</td></tr>
+      <tr><td>36</td><td>64–68</td><td>P/M</td><td>84–88</td></tr>
+      <tr><td>38</td><td>68–72</td><td>M</td><td>88–92</td></tr>
+      <tr><td>40</td><td>72–76</td><td>M/G</td><td>92–96</td></tr>
+      <tr><td>42</td><td>76–80</td><td>G</td><td>96–100</td></tr>
+      <tr><td>44</td><td>80–84</td><td>GG</td><td>100–104</td></tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- MODAIS -->
+<div id="modalMembro" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Adicionar membro <button class="modal-close" onclick="closeModal('modalMembro')">×</button></div>
+    <label>Nome</label><input id="mb-nome" placeholder="Nome completo">
+    <label>Telefone</label><input id="mb-tel" placeholder="(54) 99999-9999">
+    <label>E-mail</label><input id="mb-email" placeholder="email@exemplo.com">
+    <label>Modelo do celular</label><input id="mb-cel" placeholder="Ex: iPhone 15, Samsung S24">
+    <label>Cor personalizada</label>
+    <select id="mb-cor">
+      <option value="#185FA5">Azul</option>
+      <option value="#1D9E75">Verde</option>
+      <option value="#D85A30">Coral</option>
+      <option value="#7F77DD">Roxo</option>
+      <option value="#D4537E">Rosa</option>
+      <option value="#BA7517">Âmbar</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="salvarMembro()">Salvar</button>
+      <button class="btn" onclick="closeModal('modalMembro')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalTarefa" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Nova tarefa <button class="modal-close" onclick="closeModal('modalTarefa')">×</button></div>
+    <label>Descrição</label><input id="ta-desc" placeholder="O que precisa ser feito?">
+    <label>Tipo</label>
+    <select id="ta-tipo">
+      <option value="fazer">Fazer</option>
+      <option value="nao-esquecer">Não esquecer</option>
+      <option value="lembrar">Lembrar</option>
+      <option value="urgente">Urgente</option>
+    </select>
+    <label>Responsável</label><input id="ta-resp" placeholder="Quem vai fazer?">
+    <label>Prazo</label><input id="ta-prazo" type="date">
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="salvarTarefa()">Salvar</button>
+      <button class="btn" onclick="closeModal('modalTarefa')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAgenda" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Novo evento <button class="modal-close" onclick="closeModal('modalAgenda')">×</button></div>
+    <label>Título</label><input id="ag-titulo" placeholder="Nome do evento">
+    <div class="form-row">
+      <div><label>Data</label><input id="ag-data" type="date"></div>
+      <div><label>Hora</label><input id="ag-hora" type="time"></div>
+    </div>
+    <label>Participante / Para quem</label><input id="ag-membro" placeholder="Ex: Família, Carla, Lívia...">
+    <label>Local (opcional)</label><input id="ag-local" placeholder="Ex: UCS, Mercado, Academia">
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="salvarAgenda()">Salvar</button>
+      <button class="btn" onclick="closeModal('modalAgenda')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalLembrete" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Novo lembrete <button class="modal-close" onclick="closeModal('modalLembrete')">×</button></div>
+    <label>Título</label><input id="le-titulo" placeholder="Do que precisa lembrar?">
+    <div class="form-row">
+      <div><label>Data</label><input id="le-data" type="date"></div>
+      <div><label>Hora</label><input id="le-hora" type="time"></div>
+    </div>
+    <label>Repetição</label>
+    <select id="le-rep">
+      <option value="nenhuma">Sem repetição</option>
+      <option value="diario">Diário</option>
+      <option value="semanal">Semanal</option>
+      <option value="mensal">Mensal</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="salvarLembrete()">Salvar</button>
+      <button class="btn" onclick="closeModal('modalLembrete')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalCompra" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Adicionar item <button class="modal-close" onclick="closeModal('modalCompra')">×</button></div>
+    <label>Item</label><input id="co-item" placeholder="Nome do produto">
+    <label>Quantidade (opcional)</label><input id="co-qtd" placeholder="Ex: 2 unidades, 1kg">
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="salvarCompra()">Adicionar</button>
+      <button class="btn" onclick="closeModal('modalCompra')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalMedidas" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Registrar medidas <button class="modal-close" onclick="closeModal('modalMedidas')">×</button></div>
+    <label>Membro</label><input id="me-membro" placeholder="Nome do membro">
+    <div class="form-row">
+      <div><label>Cintura (cm)</label><input id="me-cintura" placeholder="Ex: 70"></div>
+      <div><label>Quadril (cm)</label><input id="me-quadril" placeholder="Ex: 90"></div>
+    </div>
+    <div class="form-row">
+      <div><label>Busto (cm)</label><input id="me-busto" placeholder="Ex: 88"></div>
+      <div><label>Altura (cm)</label><input id="me-altura" placeholder="Ex: 165"></div>
+    </div>
+    <div class="form-row">
+      <div><label>Calça (número)</label><input id="me-calca" placeholder="Ex: 38"></div>
+      <div><label>Blusa (P/M/G/GG)</label><input id="me-blusa" placeholder="Ex: M"></div>
+    </div>
+    <label>Sapato (número)</label><input id="me-sapato" placeholder="Ex: 36">
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="salvarMedidas()">Salvar</button>
+      <button class="btn" onclick="closeModal('modalMedidas')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LISTAS = ['Mercado','Casa Praia','Casa Caxias','Farmácia','Vestuário'];
+let listaAtiva = 'Mercado';
+
+// Data no header
+const hoje = new Date();
+document.getElementById('header-date').textContent = hoje.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+
+function getData(key, def) {
+  try { return JSON.parse(localStorage.getItem('ff_' + key)) || def; } catch { return def; }
+}
+function setData(key, val) {
+  try { localStorage.setItem('ff_' + key, JSON.stringify(val)); } catch {}
+}
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  const ids = ['inicio','familia','tarefas','agenda','lembretes','compras','medidas'];
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', ids[i] === id));
+  const renders = { inicio: renderInicio, familia: renderMembros, tarefas: renderTarefas, agenda: renderAgenda, lembretes: renderLembretes, compras: renderCompras, medidas: renderMedidas };
+  if (renders[id]) renders[id]();
+}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); }));
+
+// INÍCIO
+function renderInicio() {
+  const tarefas = getData('tarefas', []);
+  const lembretes = getData('lembretes', []);
+  const membros = getData('membros', []);
+  const todayStr = new Date().toISOString().split('T')[0];
+  const pendentes = tarefas.filter(t => !t.done).length;
+  const urgentes = tarefas.filter(t => !t.done && t.tipo === 'urgente').length;
+  const lembHoje = lembretes.filter(l => l.data === todayStr).length;
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric"><div class="metric-label">Pendentes</div><div class="metric-value">${pendentes}</div></div>
+    <div class="metric"><div class="metric-label">Urgentes</div><div class="metric-value" style="color:var(--red);">${urgentes}</div></div>
+    <div class="metric"><div class="metric-label">Lembretes hoje</div><div class="metric-value" style="color:var(--amber-dark);">${lembHoje}</div></div>
+    <div class="metric"><div class="metric-label">Membros</div><div class="metric-value">${membros.length}</div></div>`;
+  const alertas = [];
+  tarefas.filter(t => !t.done && t.tipo === 'urgente').forEach(t => alertas.push('🔴 Urgente: ' + t.desc));
+  lembretes.filter(l => l.data === todayStr).forEach(l => alertas.push('🔔 Lembrete hoje: ' + l.titulo));
+  tarefas.filter(t => !t.done && t.prazo === todayStr).forEach(t => alertas.push('📅 Vence hoje: ' + t.desc));
+  const el = document.getElementById('alertas-dia');
+  el.innerHTML = alertas.length ? alertas.map(a => `<div class="alert">${a}</div>`).join('') : '<p style="font-size:13px;color:var(--text-muted);">Nenhum alerta para hoje. Tudo tranquilo! ✅</p>';
+}
+
+// FAMÍLIA
+function renderMembros() {
+  const membros = getData('membros', []);
+  const el = document.getElementById('lista-membros');
+  if (!membros.length) { el.innerHTML = '<div class="empty"><i class="ti ti-users"></i>Nenhum membro cadastrado.</div>'; return; }
+  el.innerHTML = membros.map((m, i) => `
+    <div class="member-card" style="border-color:${m.cor};">
+      <div>
+        <div class="member-name">${m.nome}</div>
+        ${m.tel ? `<div class="member-detail"><i class="ti ti-phone"></i> ${m.tel}</div>` : ''}
+        ${m.email ? `<div class="member-detail"><i class="ti ti-mail"></i> ${m.email}</div>` : ''}
+        ${m.cel ? `<div class="member-detail"><i class="ti ti-device-mobile"></i> ${m.cel}</div>` : ''}
+      </div>
+      <button class="btn btn-danger" onclick="deleteMembro(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+function salvarMembro() {
+  const nome = document.getElementById('mb-nome').value.trim();
+  if (!nome) { alert('Informe o nome.'); return; }
+  const membros = getData('membros', []);
+  membros.push({ nome, tel: document.getElementById('mb-tel').value, email: document.getElementById('mb-email').value, cel: document.getElementById('mb-cel').value, cor: document.getElementById('mb-cor').value });
+  setData('membros', membros);
+  closeModal('modalMembro');
+  ['mb-nome','mb-tel','mb-email','mb-cel'].forEach(id => document.getElementById(id).value = '');
+  renderMembros();
+}
+function deleteMembro(i) {
+  if (!confirm('Remover membro?')) return;
+  const membros = getData('membros', []);
+  membros.splice(i, 1);
+  setData('membros', membros);
+  renderMembros();
+}
+
+// TAREFAS
+const tipoClass = { urgente:'tag-urgente', lembrar:'tag-lembrar', 'nao-esquecer':'tag-nao-esquecer', fazer:'tag-fazer' };
+const tipoLabel = { urgente:'Urgente', lembrar:'Lembrar', 'nao-esquecer':'Não esquecer', fazer:'Fazer' };
+function renderTarefas() {
+  const tarefas = getData('tarefas', []);
+  const el = document.getElementById('lista-tarefas');
+  if (!tarefas.length) { el.innerHTML = '<div class="empty"><i class="ti ti-checklist"></i>Nenhuma tarefa cadastrada.</div>'; return; }
+  el.innerHTML = tarefas.map((t, i) => `
+    <div class="task-item">
+      <input type="checkbox" class="task-check" ${t.done ? 'checked' : ''} onchange="toggleTarefa(${i})">
+      <div class="task-text ${t.done ? 'done' : ''}">
+        <span class="tag ${tipoClass[t.tipo]||'tag-fazer'}">${tipoLabel[t.tipo]||'Fazer'}</span> ${t.desc}
+        <div class="task-meta">${t.resp ? '👤 ' + t.resp : ''}${t.resp && t.prazo ? ' · ' : ''}${t.prazo ? '📅 ' + formatDate(t.prazo) : ''}</div>
+      </div>
+      <button class="btn-icon" onclick="deleteTarefa(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+function salvarTarefa() {
+  const desc = document.getElementById('ta-desc').value.trim();
+  if (!desc) { alert('Informe a descrição.'); return; }
+  const tarefas = getData('tarefas', []);
+  tarefas.push({ desc, tipo: document.getElementById('ta-tipo').value, resp: document.getElementById('ta-resp').value, prazo: document.getElementById('ta-prazo').value, done: false });
+  setData('tarefas', tarefas);
+  closeModal('modalTarefa');
+  ['ta-desc','ta-resp','ta-prazo'].forEach(id => document.getElementById(id).value = '');
+  renderTarefas();
+}
+function toggleTarefa(i) {
+  const tarefas = getData('tarefas', []);
+  tarefas[i].done = !tarefas[i].done;
+  setData('tarefas', tarefas);
+  renderTarefas();
+}
+function deleteTarefa(i) {
+  const tarefas = getData('tarefas', []);
+  tarefas.splice(i, 1);
+  setData('tarefas', tarefas);
+  renderTarefas();
+}
+
+// AGENDA
+function renderAgenda() {
+  const eventos = getData('agenda', []).sort((a,b) => (a.data+a.hora).localeCompare(b.data+b.hora));
+  const el = document.getElementById('lista-agenda');
+  if (!eventos.length) { el.innerHTML = '<div class="empty"><i class="ti ti-calendar"></i>Nenhum evento cadastrado.</div>'; return; }
+  el.innerHTML = eventos.map((e, i) => `
+    <div class="agenda-item">
+      <div>
+        <div class="agenda-time">${formatDate(e.data)}${e.hora ? ' · ' + e.hora : ''}</div>
+        <div class="agenda-title">${e.titulo}</div>
+        ${e.membro || e.local ? `<div class="agenda-sub">${e.membro}${e.membro && e.local ? ' · ' : ''}${e.local}</div>` : ''}
+      </div>
+      <button class="btn-icon" onclick="deleteAgenda(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+function salvarAgenda() {
+  const titulo = document.getElementById('ag-titulo').value.trim();
+  if (!titulo) { alert('Informe o título.'); return; }
+  const agenda = getData('agenda', []);
+  const ev = { titulo, data: document.getElementById('ag-data').value, hora: document.getElementById('ag-hora').value, membro: document.getElementById('ag-membro').value, local: document.getElementById('ag-local').value };
+  agenda.push(ev);
+  setData('agenda', agenda);
+  closeModal('modalAgenda');
+  ['ag-titulo','ag-data','ag-hora','ag-membro','ag-local'].forEach(id => document.getElementById(id).value = '');
+  if (ev.data && ev.hora) {
+    const dt = new Date(ev.data + 'T' + ev.hora);
+    const gcUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.titulo)}&dates=${ev.data.replace(/-/g,'')}T${ev.hora.replace(':','')}00/${ev.data.replace(/-/g,'')}T${ev.hora.replace(':','')}00${ev.local ? '&location=' + encodeURIComponent(ev.local) : ''}`;
+    if (confirm('Deseja abrir no Google Agenda?')) window.open(gcUrl, '_blank');
+  }
+  renderAgenda();
+}
+function deleteAgenda(i) {
+  const agenda = getData('agenda', []);
+  agenda.splice(i, 1);
+  setData('agenda', agenda);
+  renderAgenda();
+}
+
+// LEMBRETES
+const repLabel = { nenhuma:'', diario:'· Diário', semanal:'· Semanal', mensal:'· Mensal' };
+function renderLembretes() {
+  const lembretes = getData('lembretes', []).sort((a,b) => (a.data+a.hora).localeCompare(b.data+b.hora));
+  const el = document.getElementById('lista-lembretes');
+  const todayStr = new Date().toISOString().split('T')[0];
+  if (!lembretes.length) { el.innerHTML = '<div class="empty"><i class="ti ti-bell"></i>Nenhum lembrete cadastrado.</div>'; return; }
+  el.innerHTML = lembretes.map((l, i) => `
+    <div class="lembrete-item">
+      <div class="lembrete-icon"><i class="ti ti-bell"></i></div>
+      <div style="flex:1;">
+        <div class="lembrete-titulo">${l.titulo}${l.data === todayStr ? '<span class="badge badge-today">Hoje</span>' : ''}</div>
+        <div class="lembrete-data">${l.data ? formatDate(l.data) : ''}${l.hora ? ' · ' + l.hora : ''} ${repLabel[l.rep]||''}</div>
+      </div>
+      <button class="btn-icon" onclick="deleteLembrete(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+function salvarLembrete() {
+  const titulo = document.getElementById('le-titulo').value.trim();
+  if (!titulo) { alert('Informe o título.'); return; }
+  const lembretes = getData('lembretes', []);
+  lembretes.push({ titulo, data: document.getElementById('le-data').value, hora: document.getElementById('le-hora').value, rep: document.getElementById('le-rep').value });
+  setData('lembretes', lembretes);
+  closeModal('modalLembrete');
+  ['le-titulo','le-data','le-hora'].forEach(id => document.getElementById(id).value = '');
+  renderLembretes();
+}
+function deleteLembrete(i) {
+  const lembretes = getData('lembretes', []);
+  lembretes.splice(i, 1);
+  setData('lembretes', lembretes);
+  renderLembretes();
+}
+
+// COMPRAS
+function renderCompras() {
+  document.getElementById('lista-tabs').innerHTML = LISTAS.map(l => `<button class="lista-tab ${l===listaAtiva?'active':''}" onclick="setListaAtiva('${l}')">${l}</button>`).join('');
+  document.getElementById('lista-titulo').innerHTML = `<i class="ti ti-shopping-cart" style="color:var(--blue);"></i> ${listaAtiva}`;
+  const compras = getData('compras_' + listaAtiva, []);
+  const el = document.getElementById('lista-compras-items');
+  if (!compras.length) { el.innerHTML = '<div class="empty" style="padding:16px;"><i class="ti ti-shopping-cart"></i>Lista vazia.</div>'; return; }
+  const pend = compras.filter(c => !c.done).length;
+  el.innerHTML = `<p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;font-weight:600;">${pend} de ${compras.length} item(s) pendente(s)</p>` +
+    compras.map((c, i) => `
+    <div class="compra-item">
+      <input type="checkbox" ${c.done?'checked':''} onchange="toggleCompra(${i})">
+      <span style="${c.done?'text-decoration:line-through;color:var(--text-hint);':''}flex:1;">${c.item}${c.qtd ? ' <span style="color:var(--text-muted);font-size:12px;">· '+c.qtd+'</span>' : ''}</span>
+      <button class="btn-icon" onclick="deleteCompra(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+function setListaAtiva(l) { listaAtiva = l; renderCompras(); }
+function salvarCompra() {
+  const item = document.getElementById('co-item').value.trim();
+  if (!item) { alert('Informe o item.'); return; }
+  const compras = getData('compras_' + listaAtiva, []);
+  compras.push({ item, qtd: document.getElementById('co-qtd').value, done: false });
+  setData('compras_' + listaAtiva, compras);
+  closeModal('modalCompra');
+  ['co-item','co-qtd'].forEach(id => document.getElementById(id).value = '');
+  renderCompras();
+}
+function toggleCompra(i) {
+  const compras = getData('compras_' + listaAtiva, []);
+  compras[i].done = !compras[i].done;
+  setData('compras_' + listaAtiva, compras);
+  renderCompras();
+}
+function deleteCompra(i) {
+  const compras = getData('compras_' + listaAtiva, []);
+  compras.splice(i, 1);
+  setData('compras_' + listaAtiva, compras);
+  renderCompras();
+}
+
+// MEDIDAS
+function renderMedidas() {
+  const medidas = getData('medidas', []);
+  const el = document.getElementById('lista-medidas');
+  if (!medidas.length) { el.innerHTML = '<div class="empty"><i class="ti ti-ruler"></i>Nenhuma medida registrada.</div>'; return; }
+  el.innerHTML = medidas.map((m, i) => `
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-weight:700;font-size:15px;">${m.membro}</span>
+        <button class="btn btn-danger" onclick="deleteMedida(${i})"><i class="ti ti-trash"></i></button>
+      </div>
+      <div class="medidas-grid">
+        ${m.cintura ? `<div class="medida-field"><div class="medida-label">Cintura</div><div class="medida-val">${m.cintura} cm</div></div>` : ''}
+        ${m.quadril ? `<div class="medida-field"><div class="medida-label">Quadril</div><div class="medida-val">${m.quadril} cm</div></div>` : ''}
+        ${m.busto ? `<div class="medida-field"><div class="medida-label">Busto</div><div class="medida-val">${m.busto} cm</div></div>` : ''}
+        ${m.altura ? `<div class="medida-field"><div class="medida-label">Altura</div><div class="medida-val">${m.altura} cm</div></div>` : ''}
+        ${m.calca ? `<div class="medida-field"><div class="medida-label">Calça</div><div class="medida-val">${m.calca}</div></div>` : ''}
+        ${m.blusa ? `<div class="medida-field"><div class="medida-label">Blusa</div><div class="medida-val">${m.blusa}</div></div>` : ''}
+        ${m.sapato ? `<div class="medida-field"><div class="medida-label">Sapato</div><div class="medida-val">${m.sapato}</div></div>` : ''}
+      </div>
+    </div>`).join('');
+}
+function salvarMedidas() {
+  const membro = document.getElementById('me-membro').value.trim();
+  if (!membro) { alert('Informe o membro.'); return; }
+  const medidas = getData('medidas', []);
+  medidas.push({ membro, cintura: document.getElementById('me-cintura').value, quadril: document.getElementById('me-quadril').value, busto: document.getElementById('me-busto').value, altura: document.getElementById('me-altura').value, calca: document.getElementById('me-calca').value, blusa: document.getElementById('me-blusa').value, sapato: document.getElementById('me-sapato').value });
+  setData('medidas', medidas);
+  closeModal('modalMedidas');
+  ['me-membro','me-cintura','me-quadril','me-busto','me-altura','me-calca','me-blusa','me-sapato'].forEach(id => document.getElementById(id).value = '');
+  renderMedidas();
+}
+function deleteMedida(i) {
+  if (!confirm('Remover medidas?')) return;
+  const medidas = getData('medidas', []);
+  medidas.splice(i, 1);
+  setData('medidas', medidas);
+  renderMedidas();
+}
+
+renderInicio();
+</script>
+</body>
+</html>
